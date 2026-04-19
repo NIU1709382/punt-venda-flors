@@ -20,20 +20,69 @@ function renderProductos() {
         const li = document.createElement('li');
         li.className = 'producto-item';
         li.setAttribute('data-idx', idx);
-            li.innerHTML = `
-                <span class="producto-nombre">${prod.nombre}</span>
-                <button class="eliminar-producto" title="Eliminar producto" data-idx="${idx}">Eliminar</button>
-                <span class="producto-precio">€${prod.precio.toFixed(2)}</span>
-            `;
+        li.setAttribute('draggable', 'true');
+        li.innerHTML = `
+            <span class="producto-nombre">${prod.nombre}</span>
+            <button class="eliminar-producto" title="Eliminar producto" data-idx="${idx}">Eliminar</button>
+            <span class="producto-precio">€${prod.precio.toFixed(2)}</span>
+        `;
+        // Drag events
+        li.addEventListener('dragstart', handleDragStart);
+        li.addEventListener('dragover', handleDragOver);
+        li.addEventListener('drop', handleDrop);
+        li.addEventListener('dragend', handleDragEnd);
         listaProductos.appendChild(li);
     });
+}
+
+// Drag and drop handlers
+let draggedIdx = null;
+
+function handleDragStart(e) {
+    draggedIdx = +this.getAttribute('data-idx');
+    this.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    this.classList.add('dragover');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    this.classList.remove('dragover');
+    const targetIdx = +this.getAttribute('data-idx');
+    if (draggedIdx === null || draggedIdx === targetIdx) return;
+    // Reorder productos array
+    const moved = productos.splice(draggedIdx, 1)[0];
+    productos.splice(targetIdx, 0, moved);
+    renderProductos();
+}
+
+function handleDragEnd(e) {
+    this.classList.remove('dragging');
+    const items = document.querySelectorAll('.producto-item');
+    items.forEach(item => item.classList.remove('dragover'));
+    draggedIdx = null;
 }
 
 
 // --- Firestore helpers ---
 async function getAllProductos() {
     const snapshot = await db.collection('productos').get();
-    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    // Si hay productos con 'orden', ordénalos; si no, muéstralos igual
+    let docs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+    if (docs.some(p => typeof p.orden === 'number')) {
+        docs = docs.sort((a, b) => {
+            if (typeof a.orden === 'number' && typeof b.orden === 'number') return a.orden - b.orden;
+            if (typeof a.orden === 'number') return -1;
+            if (typeof b.orden === 'number') return 1;
+            return 0;
+        });
+    }
+    return docs;
 }
 
 async function addProducto(nombre, precio) {

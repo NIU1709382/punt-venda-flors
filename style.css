@@ -44,7 +44,7 @@ body {
     padding: 0;
 }
 .container {
-    max-width: 500px;
+    max-width: 600px;
     margin: 40px auto;
     background: #fff;
     border-radius: 8px;
@@ -110,6 +110,15 @@ ul {
 .producto-item:hover {
     background: #b7e4c7;
     box-shadow: 0 2px 8px rgba(64,145,108,0.15);
+}
+.producto-item.dragging {
+    opacity: 0.5;
+    background: #d8f3dc;
+    border: 2px dashed #40916c;
+}
+.producto-item.dragover {
+    background: #95d5b2 !important;
+    border: 2px solid #40916c;
 }
 .producto-nombre {
     font-weight: bold;
