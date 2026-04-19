@@ -48,7 +48,7 @@ function renderCarrito() {
     carritoUl.innerHTML = '';
     carrito.forEach((item, idx) => {
         const li = document.createElement('li');
-        li.innerHTML = `${item.nombre} - €${item.precio.toFixed(2)} <button data-idx="${idx}">Quitar</button>`;
+        li.innerHTML = `${item.nombre} - €${item.precio.toFixed(2)} <button data-idx="${idx}">Treure</button>`;
         carritoUl.appendChild(li);
     });
     totalSpan.textContent = carrito.reduce((acc, item) => acc + item.precio, 0).toFixed(2);
