@@ -29,41 +29,19 @@ function renderProductos() {
     });
 }
 
-// --- IndexedDB helpers ---
-function openDB() {
-    return new Promise((resolve, reject) => {
-        const request = window.indexedDB.open('FloresDB', 1);
-        request.onupgradeneeded = function(e) {
-            const db = e.target.result;
-            if (!db.objectStoreNames.contains('productos')) {
-                db.createObjectStore('productos', { keyPath: 'id', autoIncrement: true });
-            }
-        };
-        request.onsuccess = function(e) { resolve(e.target.result); };
-        request.onerror = function(e) { reject(e); };
-    });
-}
 
+// --- Firestore helpers ---
 async function getAllProductos() {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction('productos', 'readonly');
-        const store = tx.objectStore('productos');
-        const req = store.getAll();
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
-    });
+    const snapshot = await db.collection('productos').get();
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
 }
 
 async function addProducto(nombre, precio) {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction('productos', 'readwrite');
-        const store = tx.objectStore('productos');
-        const req = store.add({ nombre, precio });
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-    });
+    await db.collection('productos').add({ nombre, precio });
+}
+
+async function eliminarProductoDB(id) {
+    await db.collection('productos').doc(id).delete();
 }
 
 function renderCarrito() {
@@ -88,11 +66,11 @@ formProducto.addEventListener('submit', async e => {
 });
 
 listaProductos.addEventListener('click', async e => {
-    // Eliminar producto si se hace click en la X
+    // Eliminar producto si se hace click en el botón
     if (e.target.classList.contains('eliminar-producto')) {
         const idx = e.target.getAttribute('data-idx');
         const producto = productos[idx];
-        if (producto && producto.id !== undefined) {
+        if (producto && producto.id) {
             await eliminarProductoDB(producto.id);
             await cargarProductos();
         }
@@ -112,17 +90,7 @@ listaProductos.addEventListener('click', async e => {
     }
 });
 
-// Eliminar producto de la base de datos
-async function eliminarProductoDB(id) {
-    const db = await openDB();
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction('productos', 'readwrite');
-        const store = tx.objectStore('productos');
-        const req = store.delete(id);
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-    });
-}
+
 
 carritoUl.addEventListener('click', e => {
     if (e.target.tagName === 'BUTTON') {
@@ -161,4 +129,6 @@ async function cargarProductos() {
 window.addEventListener('DOMContentLoaded', () => {
     cargarProductos();
     renderCarrito();
+    // Actualización en tiempo real (opcional)
+    db.collection('productos').onSnapshot(() => cargarProductos());
 });
