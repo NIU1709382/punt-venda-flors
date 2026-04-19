@@ -58,7 +58,17 @@ function handleDrop(e) {
     // Reorder productos array
     const moved = productos.splice(draggedIdx, 1)[0];
     productos.splice(targetIdx, 0, moved);
+    guardarOrdenProductos();
     renderProductos();
+// Guardar el orden de los productos en Firestore
+async function guardarOrdenProductos() {
+    const batch = db.batch();
+    productos.forEach((prod, idx) => {
+        const ref = db.collection('productos').doc(prod.id);
+        batch.update(ref, { orden: idx });
+    });
+    await batch.commit();
+}
 }
 
 function handleDragEnd(e) {
@@ -72,7 +82,6 @@ function handleDragEnd(e) {
 // --- Firestore helpers ---
 async function getAllProductos() {
     const snapshot = await db.collection('productos').get();
-    // Si hay productos con 'orden', ordénalos; si no, muéstralos igual
     let docs = snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
     if (docs.some(p => typeof p.orden === 'number')) {
         docs = docs.sort((a, b) => {
