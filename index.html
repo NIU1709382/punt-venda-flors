@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta - Flores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Punt de Venda - Flors catalunya</h1>
+        <section class="productos">
+            <h2>Productes</h2>
+            <form id="form-producto">
+                <input type="text" id="nombre-producto" placeholder="Nom del producte" required>
+                <input type="number" id="precio-producto" placeholder="Preu (€)" min="0" step="0.01" required>
+                <button type="submit">Afegir producte</button>
+            </form>
+            <ul id="lista-productos" class="productos-grid"></ul>
+        </section>
+        <section class="venta">
+            <h2>Venda</h2>
+            <ul id="carrito"></ul>
+            <div class="total">
+                <span>Total: €<span id="total">0.00</span></span>
+            </div>
+            <form id="form-pago">
+                <input type="number" id="pago" placeholder="Diners rebuts (€)" min="0" step="0.01" required>
+                <button type="submit">Calcular canvi</button>
+            </form>
+            <div class="cambio" id="cambio"></div>
+            <button id="nueva-venta">Nova venda</button>
+        </section>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

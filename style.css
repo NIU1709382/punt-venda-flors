@@ -1,0 +1,144 @@
+.eliminar-producto {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    color: #b02a37;
+    font-size: 0.5em;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2;
+    transition: color 0.2s;
+}
+.eliminar-producto:hover {
+    color: #fff;
+    background: #b02a37;
+    border-radius: 50%;
+}
+.producto-item {
+    position: relative;
+}
+.eliminar-producto {
+    margin: 4px 0 6px 0;
+    background: transparent;
+    border: none;
+    color: #b02a37;
+    font-size: 0.5em;
+    font-weight: 400;
+    cursor: pointer;
+    padding: 0 6px;
+    line-height: 1.1;
+    display: inline-block;
+    transition: color 0.2s;
+}
+.eliminar-producto:hover {
+    color: #fff;
+    background: #b02a37;
+    border-radius: 4px;
+}
+body {
+    font-family: Arial, sans-serif;
+    background: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 24px;
+}
+h1 {
+    text-align: center;
+    color: #2d6a4f;
+}
+section {
+    margin-bottom: 32px;
+}
+form {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+input[type="text"], input[type="number"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+button {
+    background: #2d6a4f;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+button:hover {
+    background: #40916c;
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/* Grid para productos */
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    padding: 0;
+}
+
+.producto-item {
+    background: #e9f5ec;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    padding: 24px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.3em;
+    margin-bottom: 0;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.producto-item:hover {
+    background: #b7e4c7;
+    box-shadow: 0 2px 8px rgba(64,145,108,0.15);
+}
+.producto-nombre {
+    font-weight: bold;
+    color: #1b4332;
+    margin-bottom: 8px;
+    cursor: pointer;
+    text-align: center;
+}
+.producto-precio {
+    color: #2d6a4f;
+    font-size: 1.1em;
+    margin-top: 4px;
+}
+.total {
+    font-size: 1.2em;
+    margin-bottom: 12px;
+    text-align: right;
+}
+.cambio {
+    font-weight: bold;
+    color: #1b4332;
+    margin-bottom: 12px;
+    text-align: right;
+}
+#nueva-venta {
+    width: 100%;
+    background: #40916c;
+    margin-top: 8px;
+}
+#nueva-venta:hover {
+    background: #2d6a4f;
+}
