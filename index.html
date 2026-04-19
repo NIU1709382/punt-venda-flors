@@ -32,6 +32,22 @@
             <button id="nueva-venta">Nova venda</button>
         </section>
     </div>
+    <!-- Firebase SDK -->
+        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+        <script>
+            const firebaseConfig = {
+                apiKey: "AIzaSyBNGmm7FEEH0EZhCkVdSdHUoHz6OuXBoAw",
+                authDomain: "punt-venda-flors.firebaseapp.com",
+                projectId: "punt-venda-flors",
+                storageBucket: "punt-venda-flors.firebasestorage.app",
+                messagingSenderId: "837197848636",
+                appId: "1:837197848636:web:e6868a8cd650d4fc3fa339",
+                measurementId: "G-KG55XBRS74"
+            };
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+        </script>
         <script src="app.js"></script>
 </body>
 </html>
