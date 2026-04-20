@@ -21,7 +21,7 @@ function mostrarGanancias() {
         el.style = 'font-weight:bold;color:#2d6a4f;text-align:right;margin-bottom:12px;';
         document.querySelector('.venta').insertBefore(el, document.querySelector('#form-pago'));
     }
-    el.textContent = `Ganancias acumuladas: €${ganancias.toFixed(2)}`;
+    el.textContent = `Guanys acumulats: €${ganancias.toFixed(2)}`;
 }
 
 async function guardarGanancias(nuevoTotal) {
