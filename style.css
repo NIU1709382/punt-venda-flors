@@ -143,12 +143,18 @@ ul {
     margin-bottom: 12px;
     text-align: right;
 }
+
 #nueva-venta {
     width: 100%;
     background: #40916c;
-    margin-top: 8px;
+    margin-top: 24px;
 }
 #nueva-venta:hover {
     background: #2d6a4f;
+}
+
+#registrar-venta,
+#reiniciar-ganancias {
+    margin-top: 8px;
 }
 

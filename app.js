@@ -1,5 +1,39 @@
 // Lógica principal para el punto de venta de flores
 
+// --- Ganancias ---
+let ganancias = 0;
+
+async function cargarGanancias() {
+    const doc = await db.collection('estadisticas').doc('ganancias').get();
+    if (doc.exists && typeof doc.data().total === 'number') {
+        ganancias = doc.data().total;
+    } else {
+        ganancias = 0;
+    }
+    mostrarGanancias();
+}
+
+function mostrarGanancias() {
+    let el = document.getElementById('ganancias');
+    if (!el) {
+        el = document.createElement('div');
+        el.id = 'ganancias';
+        el.style = 'font-weight:bold;color:#2d6a4f;text-align:right;margin-bottom:12px;';
+        document.querySelector('.venta').insertBefore(el, document.querySelector('#form-pago'));
+    }
+    el.textContent = `Ganancias acumuladas: €${ganancias.toFixed(2)}`;
+}
+
+async function guardarGanancias(nuevoTotal) {
+    await db.collection('estadisticas').doc('ganancias').set({ total: nuevoTotal });
+    ganancias = nuevoTotal;
+    mostrarGanancias();
+}
+
+async function reiniciarGanancias() {
+    await guardarGanancias(0);
+}
+
 let productos = [];
 let carrito = [];
 
@@ -13,6 +47,9 @@ const formPago = document.getElementById('form-pago');
 const pagoInput = document.getElementById('pago');
 const cambioDiv = document.getElementById('cambio');
 const nuevaVentaBtn = document.getElementById('nueva-venta');
+
+const registrarVentaBtn = document.getElementById('registrar-venta');
+const reiniciarGananciasBtn = document.getElementById('reiniciar-ganancias');
 
 function renderProductos() {
     listaProductos.innerHTML = '';
@@ -170,6 +207,29 @@ formPago.addEventListener('submit', e => {
     }
 });
 
+
+// Registrar venta: suma el total del carrito a las ganancias y guarda en Firestore
+registrarVentaBtn.addEventListener('click', async () => {
+    const total = carrito.reduce((acc, item) => acc + item.precio, 0);
+    if (total > 0) {
+        await guardarGanancias(ganancias + total);
+        carrito = [];
+        renderCarrito();
+        cambioDiv.textContent = '';
+        formPago.reset();
+    } else {
+        alert('No hay productos en el carrito para registrar la venta.');
+    }
+});
+
+// Reiniciar ganancias
+reiniciarGananciasBtn.addEventListener('click', async () => {
+    if (confirm('¿Seguro que quieres reiniciar las ganancias a 0?')) {
+        await reiniciarGanancias();
+        alert('Ganancias reiniciadas a 0.');
+    }
+});
+
 nuevaVentaBtn.addEventListener('click', () => {
     carrito = [];
     renderCarrito();
@@ -189,4 +249,5 @@ window.addEventListener('DOMContentLoaded', () => {
     renderCarrito();
     // Actualización en tiempo real (opcional)
     db.collection('productos').onSnapshot(() => cargarProductos());
+    cargarGanancias();
 });
